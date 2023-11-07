@@ -27,7 +27,8 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
-        const foodCollection = client.db('foodBondDB').collection('foods')
+        const foodCollection = client.db('foodBondDB').collection('foods');
+        const foodRequestCollection = client.db('foodBondDB').collection('foodRequest');
 
         app.get('/foods', async (req, res) => {
             const cursor = foodCollection.find()
@@ -45,6 +46,18 @@ async function run() {
         app.post('/foods', async (req, res) => {
             const newFood = req.body;
             const result = await foodCollection.insertOne(newFood)
+            res.send(result)
+        })
+
+        app.get('/food-request', async (req, res) => {
+            const cursor = foodRequestCollection.find()
+            const result = await cursor.toArray()
+            res.send(result)
+        })
+
+        app.post('/food-request', async (req, res) => {
+            const newFoodRequest = req.body;
+            const result = await foodRequestCollection.insertOne(newFoodRequest)
             res.send(result)
         })
 

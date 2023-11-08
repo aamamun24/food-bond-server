@@ -30,9 +30,13 @@ async function run() {
         const foodCollection = client.db('foodBondDB').collection('foods');
         const foodRequestCollection = client.db('foodBondDB').collection('foodRequest');
 
+
         app.get('/foods', async (req, res) => {
-            const cursor = foodCollection.find()
-            const result = await cursor.toArray()
+            let query = {};
+            if (req.query?.donatorEmail) {
+                query = { donatorEmail: req.query.donatorEmail }
+            }
+            const result = await foodCollection.find(query).toArray()
             res.send(result)
         })
 
@@ -49,6 +53,7 @@ async function run() {
             res.send(result)
         })
 
+        // request
         app.get('/food-request', async (req, res) => {
             const cursor = foodRequestCollection.find()
             const result = await cursor.toArray()

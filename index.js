@@ -78,17 +78,7 @@ async function run() {
             res.send(result)
         })
 
-        // request
-
-        // app.get('/foods', async (req, res) => {
-        //     let query = {};
-        //     if (req.query?.donatorEmail) {
-        //         query = { donatorEmail: req.query.donatorEmail }
-        //     }
-        //     const result = await foodCollection.find(query).toArray()
-        //     res.send(result)
-        // })
-
+        // food-request API
         app.get('/food-request', async (req, res) => {
             let query = {};
             if (req.query?.requesterEmail) {

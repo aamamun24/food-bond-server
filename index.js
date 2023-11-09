@@ -79,9 +79,22 @@ async function run() {
         })
 
         // request
+
+        // app.get('/foods', async (req, res) => {
+        //     let query = {};
+        //     if (req.query?.donatorEmail) {
+        //         query = { donatorEmail: req.query.donatorEmail }
+        //     }
+        //     const result = await foodCollection.find(query).toArray()
+        //     res.send(result)
+        // })
+
         app.get('/food-request', async (req, res) => {
-            const cursor = foodRequestCollection.find()
-            const result = await cursor.toArray()
+            let query = {};
+            if (req.query?.requesterEmail) {
+                query = { requesterEmail: req.query.requesterEmail }
+            }
+            const result = await foodRequestCollection.find(query).toArray()
             res.send(result)
         })
 
@@ -108,6 +121,13 @@ async function run() {
                 }
             }
             const result = await foodRequestCollection.updateOne(filter, updatedDoc)
+            res.send(result)
+        })
+
+        app.delete('/food-request/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await foodRequestCollection.deleteOne(query)
             res.send(result)
         })
 

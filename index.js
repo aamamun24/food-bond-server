@@ -25,7 +25,7 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
         const foodCollection = client.db('foodBondDB').collection('foods');
         const foodRequestCollection = client.db('foodBondDB').collection('foodRequest');
@@ -85,9 +85,29 @@ async function run() {
             res.send(result)
         })
 
+        app.get('/food-request/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await foodRequestCollection.findOne(query)
+            res.send(result)
+        })
+
         app.post('/food-request', async (req, res) => {
             const newFoodRequest = req.body;
             const result = await foodRequestCollection.insertOne(newFoodRequest)
+            res.send(result)
+        })
+
+        app.put('/food-request/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) }
+            const updatedFoodRequest = req.body;
+            const updatedDoc = {
+                $set: {
+                    foodStatus: updatedFoodRequest.foodStatus,
+                }
+            }
+            const result = await foodRequestCollection.updateOne(filter, updatedDoc)
             res.send(result)
         })
 
